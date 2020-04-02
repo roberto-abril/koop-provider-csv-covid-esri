@@ -14,7 +14,19 @@ Model.prototype.getData = function (req, callback) {
 
   Step01_LoadFile(function (items) {
     geojson.features = items;
+    geojson.metadata = {
+        name: "Afectados",
+        idField: "id",
+        geometryType: "MultiPolygon",
+        fields:[
+          { name: 'id', type: 'Integer', alias: 'ID'},
+          { name: 'new_cases', type: 'Integer', alias: 'Nuevos casos'},
+          { name: 'cases_accumulated', type: 'Integer', alias: 'Casos acumulados'}
 
+        ]
+        /*,
+        drawingInfo: require('./symbologyDefinition/heatmap_restaurant.js')*/
+    }
     //fs.writeFileSync('./example.json',JSON.stringify(geojson));
 
     callback(null, geojson)
@@ -39,8 +51,14 @@ async function Step02_ConvertData(rows,callback){
   var dic = {};
   for (var row in rows) {
     var properties = {id:row,idField:row};
-    for(var x = 0; x < cols.length; x++)
-      properties[cols[x]] = rows[row][cols[x]];
+    for(var x = 0; x < cols.length; x++){
+      if(!isNaN(rows[row][cols[x]])){
+        properties[cols[x]] = parseInt(rows[row][cols[x]]);
+      }else{
+        properties[cols[x]] = rows[row][cols[x]];  
+      }
+      
+    }
 
     var feature = {
       type: 'Feature',
