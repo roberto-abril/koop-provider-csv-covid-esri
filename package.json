@@ -15,7 +15,7 @@
   "devDependencies": {
     "@koopjs/cli": "^0.6.1",
     "chai": "^4.2.0",
-    "mocha": "^7.1.0"
+    "mocha": "^10.2.0"
   },
   "repository": "",
   "keywords": [
